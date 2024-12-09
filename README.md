@@ -93,13 +93,167 @@ To modify clustering results:
 
 
 
-Second Step: 
+### Second Step: Monte Carlo Modeling for Core Compositions
+
+This step involves modeling compositional variations in clinopyroxene cores of Martian nakhlites due to factors such as EPMA analysis errors, sampling bias, and sectoral zonation effects observed in some meteorites. The purpose is to better estimate the error propagation in pressure-temperature (P-T) calculations by generating a range of plausible EPMA compositions for clinopyroxene cores. For a detailed description to the method used in this step, please refer to the [Lunar-Mineral-EPMA-data-Generator](https://github.com/oldkingzlwang/Lunar-Mineral-EPMA-data-Generator) project page.
+
+#### **How to Run the Program**
+
+1. **Navigate to the Folder**:
+   Open the folder `2 MC Modeling for Core Compositions` and launch the `EPMA_Composition_MC_Modeling.m` file in MATLAB.
+2. **Input Data**:
+   The program automatically reads data from all worksheets in `Nak_pyroxene.xlsx`, which contains the EPMA compositions of clinopyroxene cores for different nakhlites.
+3. **Set the Number of Samples**:
+   Modify the variable `numValidSamples` to specify the desired number of modeled EPMA compositions. The default value is 1000, but you can set this to any other number depending on your requirements.
+4. **Run the Program**:
+   After setting `numValidSamples`, simply click **Run** in MATLAB.
+
+#### **Output Files**
+
+The program generates the following outputs for each worksheet in `Nak_pyroxene.xlsx`:
+
+1. **PDF Files**:
+   - **Filename Format**: `Output_EPMA_xxx.pdf` (where `xxx` corresponds to the worksheet name).
+   - **Content**: Element-to-element diagrams comparing the modeled EPMA compositions (red points) against the measured compositions (blue points). These diagrams visually assess the consistency between the generated and real data.
+2. **Excel Files**:
+   - **Filename Format**: `Output_EPMA_xxx.xlsx`.
+   - **Content**: Contains the generated EPMA compositions for clinopyroxene cores. The data can be used for subsequent calculations or further analyses.
+
+#### **Notes**
+
+- The generated diagrams in the PDF files provide a quick visual check to ensure that the modeled data reasonably represent the actual measured compositions.
+- If you need to fine-tune the output, you can adjust the program parameters directly in the `EPMA_Composition_MC_Modeling.m` file.
+- Ensure that `Nak_pyroxene.xlsx` is up-to-date and contains accurate EPMA data before running the program.
+
+This step provides a robust foundation for reducing uncertainties in P-T estimations, enabling more precise interpretations of nakhlite formation conditions.
+
+
+
+### Third Step: P-T Calculations for Clinopyroxene Cores
+
+This step involves calculating the pressure-temperature (P-T) conditions based on the generated EPMA data from **Step 2**. The calculations are performed using the `calculate_cpx_only_press_all_eq` function from the **Thermobar** package (version 1.0.44) as described by Wieser et al. (2022). For detailed documentation on Thermobar, visit [Thermobar Documentation](https://thermobar.readthedocs.io/).
+
+#### **How to Implement This Step**
+
+1. **Navigate to the Folder**:
+   Open the `3 PT Calculations for Cores` folder and the `Cpx_only_pt_calculator_core.py` file.
+2. **Input Files**:
+   The program will read:
+   - `Nak_pyroxene.xlsx` from the parent directory to retrieve worksheet labels.
+   - `Output_EPMA_xxx.xlsx` files generated in Step 2 (stored in the `2 MC Modeling for Core Compositions` folder).
+3. **Run the Program**:
+   Simply click **Run** in your Python environment. No modifications to the code are required unless you wish to customize the behavior.
+
+#### **Workflow Details**
+
+- **File Traversal**:
+  The program automatically scans all worksheets in `Nak_pyroxene.xlsx` to identify nakhlite meteorites and locate their corresponding EPMA composition files (`Output_EPMA_xxx.xlsx`) generated in Step 2.
+- **P-T Calculations**:
+  Using the **Thermobar** package, the `calculate_cpx_only_press_all_eq` function is applied to the EPMA data in each `Output_EPMA_xxx.xlsx` file to estimate P-T conditions for clinopyroxene cores.
+- **Output Files**:
+  Results are temporarily stored in the `Calc_PT` variable during execution and saved as Excel files in the `3 PT Calculations for Cores` folder.
+  - **Filename Format**: `Output_PT_xxx.xlsx` (where `xxx` corresponds to the worksheet name in `Nak_pyroxene.xlsx`).
+  - **Content**: These files store the calculated P-T values for the clinopyroxene cores of all nakhlites listed in `Nak_pyroxene.xlsx`.
+
+#### **Notes**
+
+- Ensure that Thermobar is correctly installed and updated to version 1.0.44.
+- Before running this step, verify the accuracy and completeness of the EPMA composition files (`Output_EPMA_xxx.xlsx`) generated in Step 2.
+- If any modifications are needed, such as adding custom functionality or changing output file locations, the code can be adjusted accordingly.
+
+
+
+### Fourth Step: Compare and Plot the P-T Results of Cores
+
+This step visualizes and compares the pressure-temperature (P-T) results obtained in **Step 3**, focusing on two primary goals:
+
+1. **Intra-sample Comparison**: Testing for differences between P-T results calculated from Monte Carlo (MC)-generated EPMA data and those from the original measured EPMA data for individual nakhlite samples.
+2. **Inter-sample Comparison**: Visualizing and comparing the P-T results across different nakhlite samples or groups to identify formation P-T variations.
+
+#### **Intra-Sample Comparison of P-T Results**
+
+**Purpose**: To determine if P-T values derived from MC-generated EPMA data (in Step 2) are statistically consistent with those derived from original measured EPMA data.
+
+**Implementation**:
+
+1. Navigate to the `4 Compare and Plot the PT Results of Cores` folder.
+2. Open the `Comparison_PT.m` file.
+3. Click **Run** without modifying the code.
+
+**Workflow**:
+
+- The code reads:
+  - `Nak_pyroxene.xlsx` from the parent directory for P-T results derived from original EPMA data.
+  - `Output_EPMA_xxx.xlsx` files from the `3 PT Calculations for Cores` folder for P-T results derived from generated EPMA data.
+- Statistical tests are applied to compare the two datasets:
+  - **Mann-Whitney U Test**: For differences in medians.
+  - **t-Test**: For differences in means.
+  - **F-Test**: For differences in standard deviations.
+- Frequency distribution diagrams for pressures and temperatures are plotted for each nakhlite sample.
+- Quantitative comparison results are displayed in the MATLAB command window. A "No significant difference between generated dataset and original dataset" message indicates the MC-generated dataset is reliable.
+
+**Output**:
+
+- Two PDF files summarizing the comparison:
+  - `Output_P_summary.pdf` (Pressure Comparison)
+  - `Output_T_summary.pdf` (Temperature Comparison)
+
+**Note**: This step is optional. Previous results show no significant differences between the two datasets.
+
+#### **Inter-Sample Comparison of P-T Results**
+
+**Purpose**: To visualize P-T distributions across different nakhlite samples and identify variations.
+
+**Implementation**:
+
+1. Navigate to the `4 Compare and Plot the PT Results of Cores` folder.
+2. Open the `PT_Raincloud_Diagram.m` file.
+3. Click **Run**.
+
+**Workflow**:
+
+- The code reads `Output_EPMA_xxx.xlsx` files from the `3 PT Calculations for Cores` folder to extract P-T data from the MC-generated EPMA datasets.
+- Raincloud distribution diagrams are generated for:
+  - **Pressure**: Output as `Output_P_Raincloud.pdf`.
+  - **Temperature**: Output as `Output_T_Raincloud.pdf`.
+- Summarized P-T statistics (lower quartile, median, upper quartile) for each nakhlite sample are output to:
+  - `Output_P_Raincloud.csv` (Pressure Summary)
+  - `Output_T_Raincloud.csv` (Temperature Summary).
+
+**Pressure vs. Temperature Plot**:
+
+1. Open `PT_Plane_Diagram.m` in the same directory.
+2. Click **Run** to plot the P-T plane diagram.
+   - Input: `Output_P_Raincloud.csv` and `Output_T_Raincloud.csv`.
+   - Output: `PT_Plane_Diagram.pdf`.
+
+#### **Outputs Summary**
+
+- Intra-Sample Comparison:
+  - `Output_P_summary.pdf`
+  - `Output_T_summary.pdf`
+- Inter-Sample Comparison:
+  - `Output_P_Raincloud.pdf` (Pressure Distribution)
+  - `Output_T_Raincloud.pdf` (Temperature Distribution)
+  - `Output_P_Raincloud.csv` (Pressure Summary Table)
+  - `Output_T_Raincloud.csv` (Temperature Summary Table)
+  - `PT_Plane_Diagram.pdf` (Pressure vs. Temperature Plane Plot)
+
+#### **Notes**
+
+- Ensure that prior steps (1-3) are successfully completed before proceeding to this step.
+- You can customize comparison criteria in `Comparison_PT.m` or plotting preferences in `PT_Raincloud_Diagram.m` and `PT_Plane_Diagram.m`.
+- These outputs are essential for analyzing and visualizing the P-T variations across nakhlite samples and evaluating consistency within datasets.
+
+
+
+### Fifth Step: MC-mdeling and Calculating T for Rims
 
 
 
 
 
-References
+## References
 
 Baker D. R., Callegaro S., Marzoli A., et al. 2023. Sulfur and chlorine in nakhlite clinopyroxenes: Source region concentrations and magmatic evolution. *Geochimica et Cosmochimica Acta*, 359: 1-19. https://doi.org/10.1016/j.gca.2023.08.007.
 

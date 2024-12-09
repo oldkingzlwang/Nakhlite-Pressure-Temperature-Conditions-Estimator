@@ -1,3 +1,9 @@
+% This code implements Monte-Carlo modeling to generate any given numbers
+% of compositions based on the measured EPMA compositions.
+% The code reads the database file Nak_pyroxene.xlsx in the parent folder,
+% and export 14 PDF files and 14 excel files named "Output_EPMA_xxx". 
+% Written by Zilong Wang (Dragon Prince) on 9th December 2024.
+
 clear;clc;
 
 currentFolder = pwd;
@@ -7,7 +13,7 @@ filePath = fullfile(parentFolder, 'Nak_pyroxene.xlsx');
 % Step 1: Read data from columns B to P on sheet "Cec"
 % 'ReadVariableNames', true attempts to read column headers from the first row.
 sheets = sheetnames(filePath);
-numValidSamples = 1000;
+numValidSamples = 1000; % Change as your requirements
 
 for i=1:size(sheets,1)
     T = readtable(filePath, 'Sheet', sheets(i), 'Range', 'B:P', 'ReadVariableNames', true);
@@ -23,6 +29,10 @@ for i=1:size(sheets,1)
     generate_random(X,numValidSamples,fileout);
     disp(fileout)
 end
+
+%% This function is adapted from Lunar-Mineral-EPMA-data-Generator
+% https://github.com/oldkingzlwang/Lunar-Mineral-EPMA-data-Generator
+% Please refer to the aforementioned website for details.
 
 function generate_random(X,numValidSamples,fileout)
 

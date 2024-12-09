@@ -1,3 +1,10 @@
+% This code reads Nak_pyroxene.xlsx in the parent directory, and
+% Output_PT_xxx.xlsx in "3 PT Calculations for Cores" folder,
+% which were used to implement intra-sample comparison of P-T Results.
+% This code will export two PDF figures (Output_P_summary.pdf and 
+% Output_T_summary.pdf). Open the files to check details.
+% Written by Zilong Wang (Dragon Prince) on 8th December 2024.
+
 clear;clc;
 
 currentFolder = pwd;
