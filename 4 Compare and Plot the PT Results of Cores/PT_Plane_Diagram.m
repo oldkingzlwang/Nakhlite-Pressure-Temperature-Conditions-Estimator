@@ -18,7 +18,20 @@ P_neg_err=data_P.Median-data_P.("Lower quartile");
 T_pos_err=data_T.("Upper quartile")-data_T.Median;
 T_neg_err=data_T.Median-data_T.("Lower quartile");
 
-C=TheColor('sci',807,'map',size(dataName,2));
+C=[ 0.3098    0.1020    0.2392
+    0.2510    0.1647    0.3490
+    0.2039    0.2745    0.4784
+    0.2392    0.4196    0.6039
+    0.3922    0.5725    0.7059
+    0.6000    0.7059    0.7765
+    0.7804    0.7647    0.7569
+    0.8510    0.7098    0.6275
+    0.8235    0.5843    0.4549
+    0.7373    0.4314    0.2824
+    0.6000    0.2627    0.1529
+    0.4627    0.1333    0.1216
+    0.3765    0.0863    0.1569
+    0.3137    0.0980    0.2353];
 
 yline(0,'--k','Martian surface','LineWidth',1);
 
