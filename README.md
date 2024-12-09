@@ -5,7 +5,7 @@ A useful tool to constrain the formation pressures and temperatures of Martian n
 
 ## Introduction to the Program
 
-This program focuses on estimating the exact formation pressure and temperature conditions (P-Ts) of nakhlites using clinopyroxene-only thermobarometers. Detailed background information and rationale can be found in **Wang Z. L., and Tian W. 2025. Assessing the accuracy of clinopyroxene themobarometers in the Martian nakhlite system. *Abstract for 56th Lunar and Planetary Science Conference.* No. 1016.**
+This program focuses on estimating the exact formation pressure and temperature conditions (P-Ts) of nakhlites using clinopyroxene-only thermobarometers. Detailed background information and rationale can be found in **Wang Z. L., and Tian W. 2025. Assessing the accuracy of clinopyroxene themobarometers in the Martian nakhlite system. *Abstract for 56th Lunar and Planetary Science Conference.* No. 1016.** (see `Wang2025_56LPSC_1016.pdf` in the directory)
 
 The program workflow involves the following steps:
 
