@@ -1,5 +1,12 @@
+% This code reads Nak_pyroxene.xlsx database file in parent directory.
+% This code will export generates 14 PDF files named ClusterResult_xxx.pdf
+% (where `xxx` corresponds to the worksheet name) for better visualization.
+% For more information, please refer to README.md
+% Written by Zilong Wang (Dragon Prince) on 8th December 2024.
+
 clear;clc;
 
+% Import the Nak_pyroxene.xlsx data
 currentFolder = pwd;
 parentFolder = fullfile(currentFolder, '..');
 filePath = fullfile(parentFolder, 'Nak_pyroxene.xlsx');
@@ -12,11 +19,11 @@ for i=1:size(k_matrix,2)
     X=data(:,2:14);
     k = k_matrix(i);
     fileout=sheets(i);
-    pca_kmeans_calculator(X,k,fileout);
+    idx = pca_kmeans_calculator(X,k,fileout);
     disp(sheets(i))
 end
 
-function pca_kmeans_calculator(X,k,fileout)
+function idx = pca_kmeans_calculator(X,k,fileout)
 % % Identify and remove outliers using Mahalanobis distance, optional
 % d = mahal(X, X);  % Compute Mahalanobis distance for each point
 % threshold = chi2inv(0.975, 13);  % 95% confidence interval
@@ -48,7 +55,7 @@ set(gca, 'Box', 'on', ...
          'TickDir', 'out', 'TickLength', [.01 .01])
 
 
-% Perform K-Means on reduced data
+% Perform K-Means on data
 opts = statset('Display','final');
 [idx, C] = kmeans(X, k, 'Distance','sqeuclidean','Replicates', 100, 'Options', opts);
 
