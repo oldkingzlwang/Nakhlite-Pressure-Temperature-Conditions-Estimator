@@ -1,3 +1,9 @@
+% This code implements Monte-Carlo modeling to generate any given numbers
+% of compositions based on the measured EPMA compositions.
+% The code reads the database file Nak_pyroxene.xlsx in the parent folder,
+% and export 14 PDF files and 14 excel files named "Output_EPMA2_xxx". 
+% Written by Zilong Wang (Dragon Prince) on 9th December 2024.
+
 clear;clc;
 
 currentFolder = pwd;

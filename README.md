@@ -102,7 +102,7 @@ This step involves modeling compositional variations in clinopyroxene cores of M
 1. **Navigate to the Folder**:
    Open the folder `2 MC Modeling for Core Compositions` and launch the `EPMA_Composition_MC_Modeling.m` file in MATLAB.
 2. **Input Data**:
-   The program automatically reads data from all worksheets in `Nak_pyroxene.xlsx`, which contains the EPMA compositions of clinopyroxene cores for different nakhlites.
+   The program automatically reads data of clinopyroxene cores from all worksheets in `Nak_pyroxene.xlsx`, which contains the EPMA compositions of clinopyroxene for different nakhlites.
 3. **Set the Number of Samples**:
    Modify the variable `numValidSamples` to specify the desired number of modeled EPMA compositions. The default value is 1000, but you can set this to any other number depending on your requirements.
 4. **Run the Program**:
@@ -247,13 +247,90 @@ This step visualizes and compares the pressure-temperature (P-T) results obtaine
 
 
 
-### Fifth Step: MC-mdeling and Calculating T for Rims
+### Fifth Step: MC-modeling and Calculating T for Rims
+
+This step focuses on calculating and visualizing temperature (T) results from EPMA rim data of clinopyroxene in nakhlites. It is structured similarly to Steps 2-4, with modifications tailored for rim data.
+
+#### **Generating EPMA Data for Clinopyroxene Rims**
+
+**Objective**: Use Monte Carlo (MC) modeling to generate EPMA compositions for clinopyroxene rims, accounting for analytical uncertainty and sampling variability.
+
+**Steps**:
+
+1. Navigate to the `5 Calculation of T for Rims` folder.
+2. Open the `EPMA_Composition_MC_Modeling2.m` file.
+3. Click **Run**.
+
+**Details**:
+
+- The program reads clinopyroxene rim data from all worksheets in `Nak_pyroxene.xlsx`.
+- Generated EPMA rim compositions are saved in `Output_EPMA2_xxx.xlsx` files, where `xxx` corresponds to each worksheet name.
+- The user can modify the `numValidSamples` variable to control the number of generated samples. The default value is set to 1000.
+
+#### **Implementing Temperature Calculations**
+
+**Objective**: Estimate rim-formation temperatures using two thermometers:
+
+- A machine-learning-based thermometer (Ágreda-López et al., 2024).
+- An empirical formula-based thermometer (Wang et al., 2021).
+
+**Steps**:
+
+1. Open the `Cpx_only_t_calculator_rim.py` file in the same directory.
+2. Click **Run**. Ensure Python is properly configured with the necessary libraries.
+
+**Details**:
+
+- Machine-Learning Thermometer:
+  - Implemented in the `ML_PT_Pyworkflow_r.py` script and uses pre-trained models stored in the `models` folder.
+  - Modified from Ágreda-López et al. (2024) (see https://bit.ly/ml-pt-py).
+- Empirical-Formula Thermometer:
+  - Implemented via the `Thermobar` package (Wieser et al., 2022). Ensure `Thermobar` is installed and accessible in Python.
+
+**Outputs**:
+
+- The program generates Excel files named `Output_T_Rim_xxx.xlsx`:
+  - **Workbook A24**: Results from the machine-learning thermometer, with temperatures in °C.
+  - **Workbook W21**: Results from the empirical formula thermometer, with temperatures in K.
+
+#### **Visualizing Temperature Results**
+
+**Objective**: Generate raincloud distribution diagrams for rim-formation temperatures and summarize temperature statistics for different nakhlites.
+
+**Steps**:
+
+1. Open the `T_Raincloud_Diagram_for_Rim.m` file in the same directory.
+2. Click **Run**.
+
+**Details**:
+
+- The program reads temperature data from `Output_T_Rim_xxx.xlsx` files.
+- Averages the results from the two thermometers for each dataset.
+- Outputs the following:
+  - **Raincloud Distribution Diagram**: Visualizes temperature distributions for different nakhlites. Saved as `Output_T_Raincloud_Rim.pdf`.
+  - **Temperature Summary Table**: Summarizes lower quartile, median, and upper quartile values. Saved as `Output_T_Raincloud_Rim.csv`.
+
+**Example Outputs**:
+
+- `Output_T_Raincloud_Rim.csv`: A CSV file containing summarized temperature statistics for all samples.
+- `Output_T_Raincloud_Rim.pdf`: A PDF file with raincloud distribution plots.
+
+#### **Notes**
+
+- Modify `T_Raincloud_Diagram_for_Rim.m` to customize visualization parameters if needed.
+- Demo files in the directory illustrate expected outputs for both raincloud plots and summary tables.
 
 
+
+## Remarks
+
+If you would like to contribute to the program's development, or if you have any questions or feedback, please contact the author via email at `zilong.wang@pku.edu.cn`.
 
 
 
 ## References
+
+Ágreda-López M., Parodi V., Musu A., et al. 2024. Enhancing machine learning thermobarometry for clinopyroxene-bearing magmas. *Computers & Geosciences*, 193: 105707. https://doi.org/10.1016/j.cageo.2024.105707.
 
 Baker D. R., Callegaro S., Marzoli A., et al. 2023. Sulfur and chlorine in nakhlite clinopyroxenes: Source region concentrations and magmatic evolution. *Geochimica et Cosmochimica Acta*, 359: 1-19. https://doi.org/10.1016/j.gca.2023.08.007.
 
@@ -270,5 +347,7 @@ Ramsey S. R., Ostwald A. M., Udry A., et al. 2024. Northwest Africa 13669, a ree
 Krämer Ruggiu L., Gattacceca J., Devouard B., et al. 2020. Caleta el Cobre 022 Martian meteorite: Increasing nakhlite diversity. *Meteoritics & Planetary Science*, 55(7): 1539-1563. https://doi.org/10.1111/maps.13534.
 
 Udry A., Day J. M. D. 2020. 1.34 billion-year-old magmatism on Mars evaluated from the co-genetic nakhlite and chassignite meteorites. *Geochimica et Cosmochimica Acta*, 238: 292-315. https://doi.org/10.1016/j.gca.2018.07.006.
+
+Wang X. D., Hou T., Wang M., et al. 2021. A new clinopyroxene thermobarometer for mafic to intermediate magmatic systems. *European Journal of Mineralogy*, 33(5): 621-637. https://doi.org/10.5194/ejm-33-621-2021.
 
 Wieser P., Petrelli M., Lubbers J., et al. 2022. Thermobar: an open-source Python3 tool for thermobarometry and hygrometry. *Volcanica*, 5: 349-384. https://doi.org/10.30909/vol.05.02.349384.
